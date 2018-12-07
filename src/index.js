@@ -3,40 +3,31 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
 import './index.css';
 
-var cardInfo = {
-    name: "Agung Sapto Margono Dh",
-    expiredDate: "09/19",
-    creditCardNumber: {
-        full: "1234 5678 1234 3452",
-        short: "1234"
-    },
-    bankName: "Bank Bank Tut"
-};
-
-function CreditCard({cardInfo}) {
+function Poster({data}) {
     return (
-        <div>
-            <p className="bankName">{cardInfo.bankName}</p>
-            <p className="cc_full">{cardInfo.creditCardNumber.full}</p>
-            <p className="cc_short">{cardInfo.creditCardNumber.short}</p>
-            <p className="validThru">Valid Thru</p>
-            <p className="expiredDate">{cardInfo.expiredDate}</p>
-            <p className="name">{cardInfo.name}</p>
+        <div className="itemSemua">
+            <div className="abuAbuSemua">
+                <img src={data.imgUrl} alt="ini gambar react"/>
+            </div>
+            <div className="title">{data.title}</div>
+            <div className="subTitle">{data.subTitle}</div>
         </div>
     )
 };
 
-CreditCard.propTypes = {
-    cardInfo: PropTypes.shape({
-        bankName: PropTypes.string.isRequired,
-        creditCardNumber: PropTypes.shape({
-            full: PropTypes.string.isRequired,
-            short: PropTypes.string.isRequired
-        }).isRequired,
-        expiredDate: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-    })
+Poster.propTypes = {
+    data: PropTypes.shape({
+        imgUrl: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        subTitle: PropTypes.string.isRequired
+    }).isRequired
 };
 
-ReactDOM.render(<CreditCard cardInfo={cardInfo}/>,
+var dataPoster = {
+    imgUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
+    title: "REACT",
+    subTitle: "The best thing since jQuery, probably"
+};
+
+ReactDOM.render(<Poster data={dataPoster}/>,
     document.querySelector("#root"));

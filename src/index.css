@@ -1,23 +1,17 @@
-.bankName {
-    font-size: 40px;
+.itemSemua {
+    background-color: black;
 }
 
-.cc_full{
-    font-size: 20px;
+.abuAbuSemua {
+    background-color: gray;
 }
 
-.cs_short {
-    font-size: 10px;
+.title {
+    color: blue;
+    text-align: center;
 }
 
-.validThru {
-    font-size: 15px;
-}
-
-.expiredDate {
-    font-size: 18px;
-}
-
-.name{
-    font-size: 30px;
+.subTitle {
+    color: white;
+    text-align: center;
 }
