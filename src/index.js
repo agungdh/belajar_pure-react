@@ -1,33 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
-import './index.css';
 
-function Poster({data}) {
+function Email({data}) {
     return (
-        <div className="itemSemua">
-            <div className="abuAbuSemua">
-                <img src={data.imgUrl} alt="ini gambar react"/>
-            </div>
-            <div className="title">{data.title}</div>
-            <div className="subTitle">{data.subTitle}</div>
+        <div>
+            <table border="1">
+                <tbody>
+                    <tr>
+                        <td>{data.sender}</td>
+                        <td>{data.subject}</td>
+                        <td>{data.date}</td>
+                    </tr>
+                    <tr>
+                        <td colSpan="3">{data.message}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 };
 
-Poster.propTypes = {
+Email.propTypes = {
     data: PropTypes.shape({
-        imgUrl: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        subTitle: PropTypes.string.isRequired
+        sender: PropTypes.string.isRequired,
+        subject: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired
     }).isRequired
 };
 
-var dataPoster = {
-    imgUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
-    title: "REACT",
-    subTitle: "The best thing since jQuery, probably"
+var emailData = {
+    sender: "AgungDH",
+    subject: "Entah apa ini",
+    date: "Jun 14",
+    message: "Ini apa yaaa... kok aku paok banget -_-"
 };
 
-ReactDOM.render(<Poster data={dataPoster}/>,
+ReactDOM.render(<Email data={emailData}/>,
     document.querySelector("#root"));
