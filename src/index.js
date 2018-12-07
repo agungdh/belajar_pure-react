@@ -1,152 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import moment from 'moment';
 import PropTypes from 'prop-types'
 
-function Tweet({tweet}) {
+function Envelope({data}) {
     return (
-        <div className="tweet">
-            <Avatar hash={tweet.gravatar}/>
-            <div className="content">
-                <NameWithHandle author={tweet.author}/><Time time={tweet.timestamp}/>
-                <Message text={tweet.message}/>
-                <div className="buttons">
-                    <ReplyButton/>
-                    <RetweetButton count={tweet.retweets}/>
-                    <LikeButton count={tweet.likes}/>
-                    <MoreOptionsButton/>
-                </div>
-            </div>
+        <div>
+            <AddressLabel data={data.dari}/>
+            <hr/>
+            <AddressLabel data={data.untuk}/>
+            <hr/>
+            <Stamp hash={data.hash}/>
         </div>
     )
 }
 
-Tweet.propTypes = {
-    tweet: PropTypes.shape({
-        gravatar: PropTypes.string.isRequired,
-        author: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            handle: PropTypes.string.isRequired
-        }).isRequired,
-        timestamp: PropTypes.string.isRequired,
-        message: PropTypes.string.isRequired,
-        retweets: PropTypes.number.isRequired,
-        likes: PropTypes.number.isRequired
-    }).isRequired
-};
+Envelope.propTypes = {
+    data: PropTypes.object.isRequired
+}
 
-var testTweet = {
-    message: "Something about cats.",
-    gravatar: "xyz",
-    author: {
-        handle: "catperson",
-        name: "IAMA Cat Person"
-    },
-    likes: 2,
-    retweets: 4,
-    timestamp: "2016-07-30 21:24:37"
-};
-
-function Avatar({hash}) {
+function Stamp({hash}) {
     var url = `https://www.gravatar.com/avatar/${hash}`;
     return (
-        <img src={url}
-             className="avatar"
-             alt="avatar" />
+        <img src={url}/>
     );
 }
 
-Avatar.propTypes = {
+Stamp.propTypes = {
     hash: PropTypes.string
 };
 
-function Message({text}) {
+function AddressLabel({data}) {
     return (
-        <div className="message">
-            {text}
+        <div>
+            <p>{data.nama}</p>
+            <p>{data.alamat1}</p>
+            <p>{data.alamat2}</p>
         </div>
-    );
-}
-
-Message.propTypes = {
-    text: PropTypes.string
+    )
 };
 
-function NameWithHandle({author}) {
-    const {name, handle} = author;
-    return (
-      <span className="name-with-handle">
-          <span className="name">{name}</span>
-          <span className="handle">@{handle}</span>
-      </span>
-    );
-}
-
-NameWithHandle.propTypes = {
-    author: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        handle: PropTypes.string.isRequired
+AddressLabel.propTypes = {
+    data: PropTypes.shape({
+        nama: PropTypes.string.isRequired,
+        alamat1: PropTypes.string.isRequired,
+        alamat2: PropTypes.string.isRequired
     }).isRequired
 };
 
-const Time = ({time}) => {
-    const timeString = moment(time).fromNow();
-    return (
-        <span className="time">
-            {timeString}
-        </span>
-    );
-};
-
-Time.propTypes= {
-    time: PropTypes.string
-};
-
-const ReplyButton = () => (
-    <i className="fa fa-reply reply-button"/>
-);
-
-function getRetweetCount(count) {
-    if(count > 0) {
-        return (
-            <span className="retweet-count">
-                {count}
-            </span>
-        )
-    } else {
-        return null;
-    }
+var dataUtama = {
+    dari: {
+        nama: "Agung Sapto Margono Dh",
+        alamat1: "Nunggalrejo, Punggur, Lampung Tengah",
+        alamat2: "Lampung, Indonesia"
+    },
+    untuk: {
+        nama: "Sanji Kok Der",
+        alamat1: "Jogja 123",
+        alamat2: "Gak Tau Dimana"
+    },
+    hash: '12345'
 }
 
-const RetweetButton = ({count}) => (
-    <span className="retweet-button">
-        <i className="fa fa-retweet"/>
-        {getRetweetCount((count))}
-    </span>
-);
-
-RetweetButton.propTypes = {
-  count: PropTypes.number
-};
-
-const LikeButton = ({count}) => (
-    <span className="like-button">
-        <i className="fa fa-heart"/>
-        {count > 0 &&
-            <span className="like-count">
-                {count}
-            </span>}
-    </span>
-);
-
-LikeButton.propTypes = {
-  count: PropTypes.number
-};
-
-const MoreOptionsButton = () => (
-    <i className="fa fa-ellipsis-h more-options-button"/>
-);
-
-ReactDOM.render(<Tweet tweet={testTweet}/>,
+ReactDOM.render(<Envelope data={dataUtama}/>,
     document.querySelector("#root"));
