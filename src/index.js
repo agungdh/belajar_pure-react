@@ -1,65 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
+import './index.css';
 
-function Envelope({data}) {
-    return (
-        <div>
-            <AddressLabel data={data.dari}/>
-            <hr/>
-            <AddressLabel data={data.untuk}/>
-            <hr/>
-            <Stamp hash={data.hash}/>
-        </div>
-    )
-}
-
-Envelope.propTypes = {
-    data: PropTypes.object.isRequired
-}
-
-function Stamp({hash}) {
-    var url = `https://www.gravatar.com/avatar/${hash}`;
-    return (
-        <img src={url}/>
-    );
-}
-
-Stamp.propTypes = {
-    hash: PropTypes.string
+var cardInfo = {
+    name: "Agung Sapto Margono Dh",
+    expiredDate: "09/19",
+    creditCardNumber: {
+        full: "1234 5678 1234 3452",
+        short: "1234"
+    },
+    bankName: "Bank Bank Tut"
 };
 
-function AddressLabel({data}) {
+function CreditCard({cardInfo}) {
     return (
         <div>
-            <p>{data.nama}</p>
-            <p>{data.alamat1}</p>
-            <p>{data.alamat2}</p>
+            <p className="bankName">{cardInfo.bankName}</p>
+            <p className="cc_full">{cardInfo.creditCardNumber.full}</p>
+            <p className="cc_short">{cardInfo.creditCardNumber.short}</p>
+            <p className="validThru">Valid Thru</p>
+            <p className="expiredDate">{cardInfo.expiredDate}</p>
+            <p className="name">{cardInfo.name}</p>
         </div>
     )
 };
 
-AddressLabel.propTypes = {
-    data: PropTypes.shape({
-        nama: PropTypes.string.isRequired,
-        alamat1: PropTypes.string.isRequired,
-        alamat2: PropTypes.string.isRequired
-    }).isRequired
+CreditCard.propTypes = {
+    cardInfo: PropTypes.shape({
+        bankName: PropTypes.string.isRequired,
+        creditCardNumber: PropTypes.shape({
+            full: PropTypes.string.isRequired,
+            short: PropTypes.string.isRequired
+        }).isRequired,
+        expiredDate: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+    })
 };
 
-var dataUtama = {
-    dari: {
-        nama: "Agung Sapto Margono Dh",
-        alamat1: "Nunggalrejo, Punggur, Lampung Tengah",
-        alamat2: "Lampung, Indonesia"
-    },
-    untuk: {
-        nama: "Sanji Kok Der",
-        alamat1: "Jogja 123",
-        alamat2: "Gak Tau Dimana"
-    },
-    hash: '12345'
-}
-
-ReactDOM.render(<Envelope data={dataUtama}/>,
+ReactDOM.render(<CreditCard cardInfo={cardInfo}/>,
     document.querySelector("#root"));
