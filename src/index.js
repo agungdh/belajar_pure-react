@@ -1,61 +1,103 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
+import './index.css';
+import Time from './time';
 
-function Separator() {
-    return (
-        <div><hr/></div>
-    )
-}
-
-function Dialog({children}) {
-    let items = React.Children.toArray(children);
-    let toReturn = [];
-
-    for (let i = 0; i <= items.length - 1; i++) {
-        toReturn.push(items[i]);
-
-        // if (i -1 != items.length) {
-            toReturn.push(<Separator/>);
-        // }
+function FileIcon({file}) {
+    let icon = 'fa-file-text-o';
+    if (file.type === 'folder') {
+        icon = 'fa-folder';
     }
-    
+
     return (
-        <div>{toReturn}</div>
+        <span className="file-icon">
+            <i className={`fa ${icon}`}/>
+        </span>
     )
 }
 
-function Title({children}) {
+FileIcon.propTypes = {
+    file: PropTypes.object.isRequired
+};
+
+function FileName({file}) {
     return (
-        <div>{children}</div>
+        <React.Fragment>
+            <span className="file-name">{file.name}</span>
+        </React.Fragment>
     )
 }
 
-Title.propTypes = {
-    children: PropTypes.string.isRequired
-}
+FileName.propTypes = {
+    file: PropTypes.object.isRequired
+};
 
-function Body({children}) {
-    return (
-        <div>{children}</div>
-    )
-}
+const FileList = ({files}) => (
+    <table className="file-list">
+        <tbody>
+            {files.map(file => (
+                <FileListItem key={file.id} file={file}/>
+            ))}
+        </tbody>
+    </table>
+);
 
-Body.propTypes = {
-    children: PropTypes.string.isRequired
-}
+FileList.propTypes = {
+    files: PropTypes.array.isRequired
+};
 
-function Footer({children}) {
-    return (
-        <div>{children}</div>
-    )
-}
+const FileListItem = ({file}) => (
+    <tr className="file-list-item">
+        <td><FileIcon file={file}/></td>
+        <td><FileName file={file}/></td>
+        <td><CommitMessage commit={file.latestCommit}/></td>
+        <td><Time time={file.update_at}/></td>
+    </tr>
+);
+
+FileListItem.propTypes = {
+    file: PropTypes.object.isRequired
+};
+
+const CommitMessage = ({commit}) => (
+    <span className="commit-message">
+        {commit.message}
+    </span>
+);
+
+CommitMessage.propTypes = {
+    commit: PropTypes.object.isRequired
+};
+const testFiles = [
+    {
+        id: 1,
+        name: 'src',
+        type: 'folder',
+        update_at: '2016-07-11 21:24:00',
+        latestCommit: {
+            message: 'Initial Commit'
+        }
+    },{
+        id: 2,
+        name: 'tests',
+        type: 'folder',
+        update_at: '2016-07-11 21:24:00',
+        latestCommit: {
+            message: 'Initial Commit'
+        }
+    },{
+        id: 3,
+        name: 'README',
+        type: 'file',
+        update_at: '2016-07-11 21:24:00',
+        latestCommit: {
+            message: 'Added a readme'
+        }
+    }
+];
 
 ReactDOM.render(
-    <Dialog>
-        <Title>Judul</Title>
-        <Body>Badan</Body>
-        <Footer>Kaki</Footer>
-    </Dialog>,
+    <FileList files={testFiles}/>,
     document.querySelector('#root')
 );
