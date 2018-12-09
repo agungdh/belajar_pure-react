@@ -2,6 +2,42 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
 
+function Tail({children, count}) {
+    let items = React.Children.toArray(children);
+
+    let toReturn = [];
+    for (let i = count; i >= 1; i--) {
+        toReturn.push(items[i - 1]);
+    }
+
+    return toReturn;
+}
+
+Tail.propTypes = {
+    children: PropTypes.node.isRequired,
+    count: PropTypes.number.isRequired
+}
+
+var tailCount= 3;
+
+function Head({children, count}) {
+    let items = React.Children.toArray(children);
+
+    let toReturn = [];
+    for (let i = 1; i <= count; i++) {
+        toReturn.push(items[i - 1]);
+    }
+
+    return toReturn;
+}
+
+Head.propTypes = {
+    children: PropTypes.node.isRequired,
+    count: PropTypes.number.isRequired
+}
+
+var headCount = 4;
+
 function LastChildOnly({children}) {
     let items = React.Children.toArray(children);
 
@@ -9,7 +45,7 @@ function LastChildOnly({children}) {
 }
 
 LastChildOnly.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node.isRequired
 };
 
 function AllChild({children}) {
@@ -17,7 +53,7 @@ function AllChild({children}) {
 }
 
 AllChild.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node.isRequired
 };
 
 function FirstChildOnly({children}) {
@@ -27,7 +63,7 @@ function FirstChildOnly({children}) {
 }
 
 FirstChildOnly.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node.isRequired
 };
 
 function TestAja() {
@@ -87,9 +123,15 @@ function TestAjaLagi() {
 }
 
 ReactDOM.render(
-    <LastChildOnly>
+    <Tail count={tailCount}>
         <TestAja/>
         <TestAjaLagi/>
-    </LastChildOnly>,
+        <TestAja/>
+        <TestAjaLagi/>
+        <TestAja/>
+        <TestAjaLagi/>
+        <TestAja/>
+        <TestAjaLagi/>
+    </Tail>,
     document.querySelector('#root')
 );
