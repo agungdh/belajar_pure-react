@@ -2,23 +2,94 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
 
-function ErrorBox({children}) {
+function LastChildOnly({children}) {
+    let items = React.Children.toArray(children);
+
+    return items[items.length - 1];
+}
+
+LastChildOnly.propTypes = {
+    children: PropTypes.node
+};
+
+function AllChild({children}) {
+    return children;
+}
+
+AllChild.propTypes = {
+    children: PropTypes.node
+};
+
+function FirstChildOnly({children}) {
+    let items = React.Children.toArray(children);
+
+    return items[0];
+}
+
+FirstChildOnly.propTypes = {
+    children: PropTypes.node
+};
+
+function TestAja() {
     return (
         <div>
-            <i className="fas fa-exclamation-triangle"/>
-            {children}
+            <p>Test Aja</p>
+            <table border="1">
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr><tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr><tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     )
 }
 
-ErrorBox.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.element,
-        PropTypes.string
-    ]).isRequired
-};
+function TestAjaLagi() {
+    return (
+        <div>
+            <p>Test Aja Lagi</p>
+            <table border="1">
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr><tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr><tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    )
+}
 
 ReactDOM.render(
-    <ErrorBox>The World Is Ending !!!</ErrorBox>,
+    <LastChildOnly>
+        <TestAja/>
+        <TestAjaLagi/>
+    </LastChildOnly>,
     document.querySelector('#root')
 );
