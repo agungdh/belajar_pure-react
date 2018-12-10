@@ -1,37 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FileList from './file-list.js';
-import './index.css';
 
-const testFiles = [
-    {
-        id: 1,
-        name: 'src',
-        type: 'folder',
-        update_at: '2016-07-11 21:24:00',
-        latestCommit: {
-            message: 'Initial Commit'
-        }
-    },{
-        id: 2,
-        name: 'tests',
-        type: 'folder',
-        update_at: '2016-07-11 21:24:00',
-        latestCommit: {
-            message: 'Initial Commit'
-        }
-    },{
-        id: 3,
-        name: 'README',
-        type: 'file',
-        update_at: '2016-07-11 21:24:00',
-        latestCommit: {
-            message: 'Added a readme'
-        }
+function Child({onAction}) {
+    return (
+        <button onClick={onAction}>
+            Click Me!
+        </button>
+    )
+}
+
+class CountingParent extends React.Component {
+    state = {
+        actionCount : 0
     }
-];
+
+    handeAction = (action) => {
+        console.log('Child says', action);
+
+        this.setState({
+            actionCount: this.state.actionCount + 1
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <Child onAction={this.handeAction}/>
+                <p>Clicked {this.state.actionCount} times</p>
+            </div>
+        )
+    }
+}
 
 ReactDOM.render(
-    <FileList files={testFiles}/>,
+    <CountingParent/>,
     document.querySelector('#root')
 );
