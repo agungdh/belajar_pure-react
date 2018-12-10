@@ -32,7 +32,15 @@ class CountingParent extends React.Component {
     }
 }
 
+const Page = () => (
+    <div>
+        <CountingParent/>
+        <CountingParent/>
+        <CountingParent/>
+    </div>
+);
+
 ReactDOM.render(
-    <CountingParent/>,
+    <Page/>,
     document.querySelector('#root')
 );
