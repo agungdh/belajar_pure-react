@@ -9,10 +9,18 @@ function Child({onAction}) {
     )
 }
 
+function ResetButton({onAction}) {
+    return (
+        <button onClick={onAction}>
+            Reset
+        </button>
+    )
+}
+
 class CountingParent extends React.Component {
     state = {
         actionCount : 0
-    }
+    };
 
     handeAction = (action) => {
         console.log('Child says', action);
@@ -20,12 +28,21 @@ class CountingParent extends React.Component {
         this.setState({
             actionCount: this.state.actionCount + 1
         });
-    }
+    };
+
+    resetCount = (action) => {
+        console.log('Child says Reset', action);
+
+        this.setState({
+            actionCount: 0
+        });
+    };
 
     render() {
         return (
             <div>
                 <Child onAction={this.handeAction}/>
+                <ResetButton onAction={this.resetCount}/>
                 <p>Clicked {this.state.actionCount} times</p>
             </div>
         )
