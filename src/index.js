@@ -27,6 +27,9 @@ class CountingParent extends React.Component {
 
         this.setState({
             actionCount: this.state.actionCount + 1
+        },
+        function() {
+            console.log(this.state.actionCount);
         });
     };
 
@@ -35,6 +38,9 @@ class CountingParent extends React.Component {
 
         this.setState({
             actionCount: 0
+        },
+        function() {
+            console.log(this.state.actionCount);
         });
     };
 
