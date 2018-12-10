@@ -1,69 +1,100 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function Child({onAction}) {
-    return (
-        <button onClick={onAction}>
-            Click Me!
-        </button>
-    )
-}
+class ErrorCatcher extends React.Component {
+    state: {
+        error: null
+    }
 
-function ResetButton({onAction}) {
-    return (
-        <button onClick={onAction}>
-            Reset
-        </button>
-    )
-}
-
-class CountingParent extends React.Component {
-    state = {
-        actionCount : 0
-    };
-
-    handeAction = (action) => {
-        console.log('Child says', action);
-
-        this.setState({
-            actionCount: this.state.actionCount + 1
-        },
-        function() {
-            console.log(this.state.actionCount);
-        });
-    };
-
-    resetCount = (action) => {
-        console.log('Child says Reset', action);
-
-        this.setState({
-            actionCount: 0
-        },
-        function() {
-            console.log(this.state.actionCount);
-        });
-    };
+    componentDidCatch(error, errorInfo) {
+        console.log('[ComponentDidCatch]', error);
+        this.setState({error: errorInfo.componentStack})
+    }
 
     render() {
-        return (
-            <div>
-                <Child onAction={this.handeAction}/>
-                <ResetButton onAction={this.resetCount}/>
-                <p>Clicked {this.state.actionCount} times</p>
-            </div>
-        )
+        if(this.state) {
+            return (
+                <div>
+                    An error occurred: {this.state}
+                </div>
+            )
+        }
+
+        return this.props.children;
     }
 }
 
-const Page = () => (
-    <div>
-        <CountingParent/>
-        <CountingParent/>
-        <CountingParent/>
-    </div>
-);
+class LifecycleDemo extends React.Component{
+    state = {counter: 0}
+
+    constructor(props) {
+        super(props);
+        console.log('[constructor]');
+        console.log(' State already set:', this.state);
+    }
+
+    componentDidMount() {
+        console.log('[componentDidMount]', 'Mounted.');
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log('[getDerivedStateFromProps]');
+        console.log(' Next props:', nextProps);
+        console.log(' Prev state:', prevState);
+        return null;
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('[shouldComponentUpdate]', 'Deciding to update');
+        return true;
+    }
+
+    getSnapshotBeforeUpdate(nextProps, nextState) {
+        console.log('[getSnapshotBeforeUpdate]', 'About to update...');
+        return `Time is ${Date.now()}`;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('[componentDidUpdate]', 'Updated');
+        console.log(' snapshot:', snapshot);
+    }
+
+    componentWillUnmount() {
+        console.log('[componentWillUnmount]', 'Goodbye cruel world.');
+    }
+
+    handleClick = () => {
+        this.setState({
+            counter: this.state.counter + 1
+        });
+    }
+
+    causeErrorNextRender = () => {
+        this.setState({
+            causeError: true
+        });
+    }
+
+    render() {
+        console.log('[render]');
+        if(this.state.causeError) {
+            throw new Error('oh no !!');
+        }
+
+        return (
+            <div>
+                <span>Counter: {this.state.counter}</span>
+                <button onClick={this.handleClick}>Click to increment</button>
+                <button onClick={this.causeErrorNextRender}>Throw an error</button>
+            </div>
+        );
+    }
+}
 
 ReactDOM.render(
-    <Page/>,
+
+        <LifecycleDemo/>
+
+    ,
     document.querySelector('#root')
 );
