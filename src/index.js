@@ -1,100 +1,43 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Nav from './Nav';
+import './App.css';
 
-class ErrorCatcher extends React.Component {
-    state: {
-        error: null
-    }
+class App extends React.Component{
+    state = {
+        activeTab: 0
+    };
 
-    componentDidCatch(error, errorInfo) {
-        console.log('[ComponentDidCatch]', error);
-        this.setState({error: errorInfo.componentStack})
-    }
-
-    render() {
-        if(this.state) {
-            return (
-                <div>
-                    An error occurred: {this.state}
-                </div>
-            )
-        }
-
-        return this.props.children;
-    }
-}
-
-class LifecycleDemo extends React.Component{
-    state = {counter: 0}
-
-    constructor(props) {
-        super(props);
-        console.log('[constructor]');
-        console.log(' State already set:', this.state);
-    }
-
-    componentDidMount() {
-        console.log('[componentDidMount]', 'Mounted.');
-    }
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-        console.log('[getDerivedStateFromProps]');
-        console.log(' Next props:', nextProps);
-        console.log(' Prev state:', prevState);
-        return null;
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log('[shouldComponentUpdate]', 'Deciding to update');
-        return true;
-    }
-
-    getSnapshotBeforeUpdate(nextProps, nextState) {
-        console.log('[getSnapshotBeforeUpdate]', 'About to update...');
-        return `Time is ${Date.now()}`;
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('[componentDidUpdate]', 'Updated');
-        console.log(' snapshot:', snapshot);
-    }
-
-    componentWillUnmount() {
-        console.log('[componentWillUnmount]', 'Goodbye cruel world.');
-    }
-
-    handleClick = () => {
+    handleTabChange = (index) => {
         this.setState({
-            counter: this.state.counter + 1
+            activeTab: index
         });
     }
 
-    causeErrorNextRender = () => {
-        this.setState({
-            causeError: true
-        });
+    renderContent() {
+        switch (this.state.activeTab) {
+            default:
+            case 0: return <span>Items</span>;
+            case 1: return <span>Cart</span>;
+        }
     }
 
     render() {
-        console.log('[render]');
-        if(this.state.causeError) {
-            throw new Error('oh no !!');
-        }
-
+        let {activeTab} = this.state;
         return (
-            <div>
-                <span>Counter: {this.state.counter}</span>
-                <button onClick={this.handleClick}>Click to increment</button>
-                <button onClick={this.causeErrorNextRender}>Throw an error</button>
+            <div className="App">
+                <Nav activeTab={activeTab} onTabChange={this.handleTabChange()}/>
+                <main className="App-content">
+                    {this.renderContent()}
+                </main>
             </div>
         );
     }
 }
 
 ReactDOM.render(
-
-        <LifecycleDemo/>
-
-    ,
+    <App/>,
     document.querySelector('#root')
 );
+
+// export default App;
